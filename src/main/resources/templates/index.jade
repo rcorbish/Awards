@@ -1,0 +1,14 @@
+extends layout
+
+block content
+
+	h2 Welcome #{user}
+		
+	p Menu
+	ul
+		li
+			a( href='nominate') Nominate someone for an award
+		li
+			a( href='list') Show active nominations
+		li
+			a( href='vote') Vote on a nominations

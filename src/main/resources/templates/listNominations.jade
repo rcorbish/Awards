@@ -1,0 +1,93 @@
+extends layout
+
+block content
+
+	h2 Active Nominations
+	
+	table.nominations
+		tr.head
+			th Spot Award
+			th Above and Beyond
+			th Approved
+			th Current Vote
+			th Nominee
+			th Nominated At
+			th Nominated By
+			th Reason for nomination
+				
+		for nomination in nominations
+			- var scope = nomination.scope == 'spot' ? 'Y' : ' ' ;
+			- var reason = nomination.reason == 'a-and-b' ? 'Y' : ' ' ;
+			- var approved = nomination.approved ? 'Y' : ' ' ;
+			- var id = nomination.id ;
+			tr.body(draggable="true", data-id=id, ondragstart="dragStart(event)" )
+				td #{scope}
+				td #{reason}
+				td #{approved}
+				td #{nomination.totalVotes}
+				td #{nomination.nominee} 
+				td #{nomination.when}
+				td #{nomination.nominator} 
+				td #{nomination.details}
+				
+				
+	#approve.upload Drop Here to Approve
+		
+	#unapprove.upload Drop Here to Unapprove
+	
+	script(src="js/makeLiveTables.js")
+	script.
+		var user = '#{user}' ;
+		var authorization = '#{authorization}' ;
+		var cookie = '#{cookie}' ;
+	
+		makeLiveTable( ".nominations", "300px", [ "100px", "100px", "100px", "100px", "150px", "200px", "150px", "400px" ] ) ;
+		
+		function dragStart(e) {			
+			e.dataTransfer.effectAllowed = 'move';
+			e.dataTransfer.setData('text/text', e.srcElement.dataset.id );
+		}
+
+		function initDropTarget( div, uploadUrl ) {
+			div.ondragover = function (event) {			
+				event.dataTransfer.dropEffect = 'move';
+				this.className = "upload dropok" ; 
+				event.preventDefault();
+				return false;
+			}.bind( div ) ;
+			
+			div.ondragend = function (event) { 
+				this.className = "upload" ; 
+				event.preventDefault();
+				return false; 
+			};
+			
+			div.ondragleave = function (event) { 
+				this.className = "upload" ; 
+				event.preventDefault();
+				return false; 
+			};
+			div.ondrop = function (event) {
+				this.className = "upload" ; 
+				event.preventDefault();
+				
+				var id = event.dataTransfer.getData('text/text') ;
+				var xhr = new XMLHttpRequest();
+					
+				xhr.onload = function(event) {
+					var tr = document.querySelector( "[data-id='"+id+"']" ) ;
+					var td = tr.querySelector( "td:nth-child(3)" ) ;
+					td.innerHTML = event.target.responseText ;
+				} ;
+								
+				xhr.open("PATCH", uploadUrl );
+				xhr.setRequestHeader("Authorization", authorization );
+				xhr.setRequestHeader("Cookie", cookie );
+				xhr.send( id );
+				return false;
+			}.bind( div ) ;
+		}
+		
+		initDropTarget( document.getElementById( "approve" ), "/approve" ) ;
+		initDropTarget( document.getElementById( "unapprove" ), "/unapprove" ) ;
+		

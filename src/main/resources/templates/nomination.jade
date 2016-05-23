@@ -1,0 +1,72 @@
+extends layout
+
+block content
+
+	h2 Welcome #{user}
+	
+	form.main( action='nominate', method='post' )
+		.people
+			input.entry(placeholder="Nominee's name", name='nominee', hideable, tabindex=1, autofocus, required )
+			input.entry(placeholder='Nominated by', name='nominator', hideable, tabindex=2, required, value='#{user}' )
+			
+		.nomination
+			div
+				textarea.entry( placeholder='Nominated for', name='details', cols=80, rows=10, hideable, tabindex=3, required )
+			div
+				ul( hideable )
+					li
+						input.entry(type='radio', name='scope', id='quarterly', value='quarterly', checked, tabindex=4 ) 
+						label( for='quarterly') <span></span>Quarterly award
+						.check
+					li 
+						input.entry(type='radio', name='scope', id='spot', value='spot', tabindex=4 )
+						label( for='spot') <span></span>On the spot award
+						.check
+			div
+				ul( hideable )
+					li
+						input.entry(type='radio', name='reason', id='above-and-beyond', value='a-and-b', checked,  tabindex=5 ) 						
+						label( for='a-and-b') <span></span>Above and beyond
+						.check
+					li
+						input.entry(type='radio', name='reason', id='continued', value='continued', tabindex=5 ) 
+						label( for='continued') <span></span>Continued performance
+						.check
+
+			textarea#results.entry( placeholder='Drop email (or type) recommendations here', name='supportingText', cols=80, rows=10, hideable, tabindex=6 )
+			
+			div
+				input.entry( type='submit' , tabindex=7, hideable )				
+			
+	script.
+		function initializeFormEntries( form ) {
+			var formBlocks = document.querySelectorAll( "[hideable]" ) ;
+			for( var i=0 ; i<formBlocks.length ; i++ ) {
+				var formBlock = formBlocks[i] ;
+				formBlock.style.opacity = 0.25 ;
+			} 
+			var tabbables  = document.querySelectorAll( "[tabindex]" ) ;
+			for( var i=0 ; i<tabbables.length ; i++ ) {
+				var tabbable = tabbables[i] ;
+				tabbable.onfocus = function(e) {
+					console.log( this.id + " got focus" ) ;
+					setFormBlockOpacity( this, 1 ) ;
+				}.bind( tabbable ) ;
+				tabbable.onblur = function(e) {
+					console.log( this.id + " lost focus" ) ;
+					setFormBlockOpacity( this, 0.25 ) ;
+				}.bind( tabbable ) ;
+			} 
+		}
+		
+		function setFormBlockOpacity( childElement, opacity ) {
+			var e = childElement ; 
+			while( e && !e.hasAttribute( "hideable" ) ) {
+				e=e.parentElement ;
+			}
+			if( e ) {
+				e.style.opacity = opacity ;
+			}								
+		}
+		
+		initializeFormEntries( document.querySelector( "form" ) ) ;

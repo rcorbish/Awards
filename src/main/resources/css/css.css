@@ -1,0 +1,161 @@
+@import url(https://fonts.googleapis.com/css?family=Lato);
+@CHARSET "UTF-8";
+
+html {
+	font-family: Lato ;
+	background-color: #222222 ;
+	color: #F7A500 ;
+}
+
+h1 {
+	text-align: center ;
+	letter-spacing: 7px;	
+}
+h2 {
+	text-align: center ;
+	letter-spacing: 3px;	
+}
+a, a:visited {
+	color: #F7A500 ;
+	text-decoration: none ;
+	font-size: 20pt ;
+}
+
+.sameline {
+	display: inline-block ;
+}
+.leftalign {
+	text-align: left ;
+}
+.rightalign {
+	text-align: right ;
+}
+.sameline input[type=radio]{
+  position: absolute;
+  visibility: hidden;
+}
+.sameline label{
+  display: block;
+  position: relative;
+  font-weight: 300;
+  font-size: 1.35em;
+  padding: 25px 25px 25px 80px;
+  margin: 10px auto;
+  height: 30px;
+  z-index: 9;
+  cursor: pointer;
+  -webkit-transition: all 0.25s linear;
+}
+
+.sameline label:hover {
+	color: #FFFFFF;
+}
+.main{
+	text-align: center ;
+	width: 100% ;
+	position: relative ;
+}
+.people {
+	width: 100% ;	
+}
+.nomination {
+	width: 100% ;
+}
+
+.entry {
+	position: relative ;
+	display: inline-block;
+	margin:10px ;
+	background-color: #021B56 ;
+	color: #F7A500 ;
+	padding: 10px ;
+}
+
+
+.upload {
+	display: inline-block ;
+	position: relative ;
+	width: 120px ;
+	height: 120px ;
+	border: 3px dashed #00091C ;
+	margin: 10px ;
+	padding: 10px ;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 30px; 
+	background-color: #021B56 ;
+}
+
+.dropok {
+	border: 3px dashed #FFC757 ;
+	background-color: #4766AD ;
+}
+
+#results {
+	display: inline-block ;
+	position: relative ;
+	width: 600px ;
+	height: 200px ;
+	border: 1px solid #00091C ;
+	margin: 10px ;
+	padding: 10px ;
+	background-color: #021B56 ;
+}
+
+
+@keyframes zoomin {
+	from { transform:rotateX(-90deg);}
+	to { transform: rotateX(0deg); }
+}
+
+@keyframes neon {
+	from { text-shadow:0 0 10px #fa0, 0 0 20px #e90, 0 0 30px #c80, 0 0 40px #F7A500;}
+	to { text-shadow: 0 0 5px #fa0, 0 0 10px #e90, 0 0 15px #c80, 0 0 20px #F7A500;}
+}
+
+ul {
+	display: inline-block;
+}
+ul[hideable] li {
+	list-style: none ;
+}
+
+input[type=radio] {
+  opacity   : 0;
+}
+
+input[type=radio] + label{
+  display: inline-block;
+}
+
+input[type=radio] + label + .check{
+  display          : inline-block;
+  width            : 15px ;
+  height           : 15px ;
+  border           : 3px solid transparent;
+  background 	   : transparent ;
+  vertical-align   : middle;
+  margin-left: 10px ;
+}
+
+input[type=radio]:checked + label + .check{
+  border           : 3px solid #00091C;
+  border-radius    : 100%;
+  background 	   : #4766AD ;
+}
+
+table.nominations  {
+	border-collapse: collapse ;
+}
+table.nominations thead tr {
+	text-align: left ;
+	font-size: 12pt ;
+	background-color: #00091C ;
+}
+
+table.nominations tbody tr {
+	line-height:25px ;
+}
+table.nominations tbody tr:nth-of-type(even) {
+	background-color: #2A1C00 ;
+}

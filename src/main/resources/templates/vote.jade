@@ -1,0 +1,97 @@
+extends layout
+
+block content
+
+	h2 Active Nominations
+	
+	table.nominations
+		tr.head
+			th Spot Award
+			th Above and Beyond
+			th My Vote
+			th Nominee
+			th Nominated At
+			th Nominated By
+			th Reason for nomination
+				
+		for nomination in nominations
+			- var scope = nomination.scope == 'spot' ? 'Y' : ' ' ;
+			- var reason = nomination.reason == 'a-and-b' ? 'Y' : ' ' ;
+			- var id = nomination.id ;
+			- var user = user
+			if( nomination.approved ) 
+				tr.body(draggable="true", data-id=id, ondragstart="dragStart(event)" )
+					td #{scope}
+					td #{reason}
+					td #{nomination.getVotesBy(user) }
+					td #{nomination.nominee} 
+					td #{nomination.when}
+					td #{nomination.nominator} 
+					td #{nomination.details}
+				
+				
+	#vote1.upload(data-vote=1) Drag from table to score 1 point		
+	#vote2.upload(data-vote=2) Drag from table to score 2 points	
+	#vote3.upload(data-vote=3) Drag from table to score 3 points	
+	#vote4.upload(data-vote=4) Drag from table to score 4 points	
+	#vote5.upload(data-vote=5) Drag from table to score 5 points	
+	#vote6.upload(data-vote=6) Drag from table to score 6 points		
+	
+	script(src="js/makeLiveTables.js")
+	script.
+		var user = '#{user}' ;
+		
+		makeLiveTable( ".nominations", "300px", [ "100px", "100px", "100px", "150px", "200px", "150px", "400px" ] ) ;
+		
+		function dragStart(e) {			
+			e.dataTransfer.effectAllowed = 'move';
+			e.dataTransfer.setData('text/text', e.srcElement.dataset.id );
+		}
+
+		function initDropTarget( div, uploadUrl ) {
+			div.ondragover = function (event) {			
+				event.dataTransfer.dropEffect = 'move';
+				this.className = "upload dropok" ; 
+				event.preventDefault();
+				return false;
+			}.bind( div ) ;
+			
+			div.ondragend = function (event) { 
+				this.className = "upload" ; 
+				event.preventDefault();
+				return false; 
+			};
+			
+			div.ondragleave = function (event) { 
+				this.className = "upload" ; 
+				event.preventDefault();
+				return false; 
+			};
+			div.ondrop = function (event) {
+				this.className = "upload" ; 
+				event.preventDefault();
+				
+				var id = event.dataTransfer.getData('text/text') ;
+				var points = this.dataset.vote ;
+				var xhr = new XMLHttpRequest();
+					
+				xhr.onload = function(event) {
+					var tr = document.querySelector( "[data-id='"+id+"']" ) ;
+					var td = tr.querySelector( "td:nth-child(3)" ) ;
+					td.innerHTML = event.target.responseText ;
+				} ;
+								
+				xhr.open("PATCH", uploadUrl );
+				xhr.setRequestHeader("X-Token", "TOKEN");				
+				xhr.send( id + "\n" + points + "\n" + user );
+				return false;
+			}.bind( div ) ;
+		}
+		
+		initDropTarget( document.getElementById( "vote1" ), "/place-vote" ) ;
+		initDropTarget( document.getElementById( "vote2" ), "/place-vote" ) ;
+		initDropTarget( document.getElementById( "vote3" ), "/place-vote" ) ;
+		initDropTarget( document.getElementById( "vote4" ), "/place-vote" ) ;
+		initDropTarget( document.getElementById( "vote5" ), "/place-vote" ) ;
+		initDropTarget( document.getElementById( "vote6" ), "/place-vote" ) ;
+		
