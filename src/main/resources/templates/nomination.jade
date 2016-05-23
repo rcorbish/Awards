@@ -4,7 +4,7 @@ block content
 
 	h2 Welcome #{user}
 	
-	form.main( action='nominate', method='post' )
+	form.main( action='submit-nomination', method='post' )
 		.people
 			input.entry(placeholder="Nominee's name", name='nominee', hideable, tabindex=1, autofocus, required )
 			input.entry(placeholder='Nominated by', name='nominator', hideable, tabindex=2, required, value='#{user}' )

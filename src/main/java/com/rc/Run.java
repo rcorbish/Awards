@@ -109,7 +109,7 @@ public class Run {
 		get( "/vote", this::vote, new JadeTemplateEngine( jadeConfig ) ) ;		
 		get( "/nominate", this::nominate, new JadeTemplateEngine( jadeConfig ) ) ;		
 		
-		post( "/submit-nominate", this::submitNomination, new JadeTemplateEngine( jadeConfig ) ) ;
+		post( "/submit-nomination", this::submitNomination, new JadeTemplateEngine( jadeConfig ) ) ;
 		patch( "/approve", this::approve ) ;
 		patch( "/unapprove", this::unapprove ) ;
 		patch( "/place-vote", this::placeVote ) ;
